@@ -1,0 +1,90 @@
+{% extends 'main_page.html' %}
+{% block title %} Manage Account {% endblock title %}
+
+{% block body_content %}
+{% load static %}
+<div id="dash"> 
+
+  <section class="is-title-bar">
+    <div class="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
+      <ul>
+        <li>Account Statement</li>
+      </ul>
+    </div>
+  </section>
+  {% if messages %}
+    {% for message in messages %}
+        {{message}}
+    {% endfor %}
+  {% endif %}
+  
+    <section class="section main-section">
+        <div class="grid gap-6 grid-cols-1 md:grid-cols-3 mb-6">
+            <div class="card">
+                <div class="card-content">
+                    <div class="flex items-center justify-between">
+                        <div class="widget-label">
+                            <table class="table table-striped table-hover mx-auto px-auto">
+                                <thead bgcolor="#969cad">
+                                    <th>ACCOUNT NUMBER</th><th>TRANSACTION TYPE</th><th>TRANSACTION DATE</th>
+                                    <th>RECIPIENT NUMBER</th><th>RECIPIENT BANK</th><th>TRANSACTION AMOUNT</th><th>SENDER ACCOUNT</th><th>SENDER INFO</th>
+                                </thead>
+                                {% if account_statement %}
+
+                                {% for transact in account_statement %}
+                                
+                                <tr>
+                                    <td>
+                                        <span style="color: #969cad;" class="font-weight-bold">
+                                            {{transact.account_number}}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span style="color: #0e399c;" class="font-weight-bold">
+                                        {{transact.transaction_type}}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span style="color: #0e399c;" class="font-weight-bold">
+                                            {{transact.transaction_date}}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span style="color: #0e399c;" class="font-weight-bold">
+                                            {{transact.recipient_number}}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span style="color: #0e399c;" class="font-weight-bold">
+                                            {{transact.recipient_bank}}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span style="color: #0e399c;" class="font-weight-bold">
+                                            {{transact.transaction_amount}}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span style="color: #0e399c;" class="font-weight-bold">
+                                            {{transact.sender_account}}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span style="color: #0e399c;" class="font-weight-bold">
+                                            <a href="{% url 'staff_profile' transact.user_id %}">{{transact.user_id}}</a> 
+                                        </span>
+                                    </td>
+                                </tr>
+
+                                {% endfor %}
+
+                                {% endif %}
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock body_content %}

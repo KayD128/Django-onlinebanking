@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en" class="">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %} {% endblock title %}</title>
+
+  {% load static %}
+  <!-- It will let your doc load static files -->
+
+  <!-- Tailwind is included -->
+  <link rel="stylesheet" href={% static "css/main.css" %}>
+
+  <link rel="apple-touch-icon" sizes="180x180" href={% static "img/apple-touch-icon.png" %}>
+  <link rel="icon" type="image/png" sizes="32x32" href={% static "img/favicon-32x32.png" %}>
+  <link rel="icon" type="image/png" sizes="16x16" href={% static "img/favicon-16x16.png" %}>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-130795909-1"></script>
+  <link rel="stylesheet" href={% static "css/index.css" %}>
+  <!-- CSS only -->
+
+</head>
+<body>
+
+<div id="app">
+
+<nav id="navbar-main" class="navbar is-fixed-top">
+  <div class="navbar-brand">
+    <a class="navbar-item mobile-aside-button">
+      <span class="icon"><i class="mdi mdi-forwardburger mdi-24px"></i></span>
+    </a>
+    <div class="navbar-item">
+      <div class="control"><input placeholder="Search everywhere..." class="input"></div>
+    </div>
+  </div>
+  <div class="navbar-brand is-right">
+    <a class="navbar-item --jb-navbar-menu-toggle" data-target="navbar-menu">
+      <span class="icon"><i class="mdi mdi-dots-vertical mdi-24px"></i></span>
+    </a>
+  </div>
+  <div class="navbar-menu" id="navbar-menu">
+    <div class="navbar-end">
+      <div class="navbar-item dropdown has-divider has-user-avatar">
+        <a class="navbar-link">
+          <div class="user-avatar">
+            <img src="https://avatars.dicebear.com/v2/initials/john-doe.svg" alt="John Doe" class="rounded-full">
+          </div>
+          <div class="is-user-name"><span>{{user.username}}</span></div>
+          <span class="icon"><i class="mdi mdi-chevron-down"></i></span>
+        </a>
+        <div class="navbar-dropdown">
+          <a class="navbar-item" href="{% url 'staff_profile' user.id %}">
+            <span class="icon"><i class="mdi mdi-account"></i></span>
+            <span>My Profile</span>
+          </a>
+
+          <a class="navbar-item">
+            <span class="icon"><i class="mdi mdi-settings"></i></span>
+            <span>Settings</span>
+          </a>
+          <a class="navbar-item">
+            <span class="icon"><i class="mdi mdi-email"></i></span>
+            <span>Messages</span>
+          </a>
+          <a class="navbar-item" href="{% url 'password_change' %}">
+            <span class="icon"><i class="mdi mdi-email"></i></span>
+            <span>Change Password</span>
+          </a>
+          <hr class="navbar-divider">
+          <a class="navbar-item" href="{% url 'logout' %}">
+            <span class="icon"><i class="mdi mdi-logout"></i></span>
+            <span>Log Out</span>
+          </a>
+        </div>
+      </div>
+      <a title="Log out" class="navbar-item desktop-icon-only" href="{% url 'logout' %}">
+        <span class="icon"><i class="mdi mdi-logout"></i></span>
+        <span>Log out</span>
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- ****************************side nav ***************************************************************-->
+
+<aside class="aside is-placed-left is-expanded">
+  <div class="menu is-menu-main">
+    <p class="menu-label">General</p>
+    <ul class="menu-list">
+      <li class="active">
+        <a href="{% url 'dashboard' %}">
+          <span class="icon"><i class="mdi mdi-desktop-mac"></i></span>
+          <span class="menu-item-label">Dashboard</span>
+        </a>
+      </li>
+    </ul>
+    <ul class="menu-list">
+      {% if user.is_staff %}
+        <li class="--set-active-profile-html" id="dep">
+          <a href="{% url 'deposit' request.user.id %}" class="menu-item-label">
+            <span class="icon"><i class="mdi mdi-account-circle"></i></span>
+            <span>Deposit</span>
+          </a>
+        </li>
+        {% endif %}
+        <li class="--set-active-profile-html" id="dep">
+          <a href="{% url 'withdraw' 'withdraw' %}" class="menu-item-label">
+            <span class="icon"><i class="mdi mdi-account-circle"></i></span>
+            <span> Withdraw</span>
+          </a>
+        </li>
+        <li class="--set-active-profile-html" id="tran">
+          <a class="menu-item-label" href="{% url 'transfer' 'transfer' %}">
+            <span class="icon"><i class="mdi mdi-account-circle"></i></span>
+            <span>Transfer</span>
+          </a>
+        </li>
+        <li class="--set-active-profile-html" id="tran">
+          <a class="menu-item-label" href="{% url 'pay_bill' 'pay_bill' %}">
+            <span class="icon"><i class="mdi mdi-account-circle"></i></span>
+           <span>Pay Bills</span> 
+          </a>
+        </li>
+        <li class="--set-active-profile-html" id="rech">
+          <a class="menu-item-label" href="{% url 'recharge' 'recharge' %}">
+            <span class="icon"><i class="mdi mdi-account-circle"></i></span>
+            <span>Recharge</span>
+          </a>
+        </li>
+        <li class="--set-active-profile-html" id="rech">
+          <a class="menu-item-label" href="{% url 'display_account' request.user.id %}">
+            <span class="icon"><i class="mdi mdi-account-circle"></i></span>
+            <span>Display Accounts</span>
+          </a>
+        </li>
+        {% if user.is_superuser %}
+        <li class="--set-active-profile-html" id="rech">
+          <a class="nav-link" href="{% url 'manage_staff' %}">
+            <span class="icon"><i class="mdi mdi-account-circle"></i></span>
+            <span>Manage Staff</span>
+          </a>
+        </li>
+      {% endif %}
+
+      {% if user.is_staff %}
+      <li class="--set-active-profile-html" id="rech">
+        <a class="nav-link" href="{% url 'manage_customer' %}">
+          <span class="icon"><i class="mdi mdi-account-circle"></i></span>
+          <span>Manage Customer</span>
+        </a>
+      </li>
+      {% endif %}
+    </ul>
+ 
+</aside>
+<!-- ****************************side nav ***********************************************************-->
+{% block body_content %}
+
+{% endblock body_content %}
+
+<!-- begining of profile-->  
+<div id="profile" hidden="true">
+
+  
+  <section class="is-title-bar">
+    <div class="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
+      <ul>
+        <li>Profile</li>
+      </ul>
+    </div>
+  </section>
+  
+  <section class="section main-section">
+      <div class="grid grid-cols-1 gap-6 lg:grid-cols-2 mb-6">
+        <div class="card">
+          <header class="card-header">
+            <p class="card-header-title">
+              <span class="icon"><i class="mdi mdi-account-circle"></i></span>
+              Edit Profile
+            </p>
+          </header>
+          <div class="card-content">
+            <form>
+              <div class="field">
+                <label class="label">Avatar</label>
+                <div class="field-body">
+                  <div class="field file">
+                    <label class="upload control">
+                      <a class="button blue">
+                        Upload
+                      </a>
+                      <input type="file">
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <hr>
+              <div class="field">
+                <label class="label">Name</label>
+                <div class="field-body">
+                  <div class="field">
+                    <div class="control">
+                      <input type="text" autocomplete="on" name="name" placeholder="John Doe" class="input" required>
+                    </div>
+                    <p class="help">Required. Your name</p>
+                  </div>
+                </div>
+              </div>
+              <div class="field">
+                <label class="label">E-mail</label>
+                <div class="field-body">
+                  <div class="field">
+                    <div class="control">
+                      <input type="email" autocomplete="on" name="email" placeholder="user@example.com" class="input" required>
+                    </div>
+                    <p class="help">Required. Your e-mail</p>
+                  </div>
+                </div>
+              </div>
+              <hr>
+              <div class="field">
+                <div class="control">
+                  <button type="submit" class="button green">
+                    Submit
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      
+        <div class="card">
+          <header class="card-header">
+            <p class="card-header-title">
+              <span class="icon"><i class="mdi mdi-account"></i></span>
+              Profile
+            </p>
+          </header>
+          <div class="card-content">
+            <div class="image w-48 h-48 mx-auto">
+              <img src="https://avatars.dicebear.com/v2/initials/john-doe.svg" alt="John Doe" class="rounded-full">
+            </div>
+            <hr>
+            <div class="field">
+              <label class="label">Name</label>
+              <div class="control">
+                <input type="text" readonly value="John Doe" class="input is-static">
+              </div>
+            </div>
+            <hr>
+            <div class="field">
+              <label class="label">E-mail</label>
+              <div class="control">
+                <input type="text" readonly value="user@example.com" class="input is-static">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <header class="card-header">
+          <p class="card-header-title">
+            <span class="icon"><i class="mdi mdi-lock"></i></span>
+            Change Password
+          </p>
+        </header>
+      </div>
+  </section>
+</div>
+
+<!--***************************** end of profile**********************-->
+
+<!--********************************* beggining of deposit ******************-->
+<div id="deposit" hidden="true">
+
+  <section class="is-title-bar">
+  <div class="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
+    <ul>
+      <li>Deposit</li>
+    </ul>
+  </div>
+</section>
+
+<section class="is-hero-bar">
+  <div class="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
+    <h1 class="title">
+      Deposit
+    </h1>
+  </div>
+</section>
+
+  <section class="section main-section">
+    <div class="card">
+      <header class="card-header">
+        <p class="card-header-title">
+          <span class="icon"><i class="mdi mdi-lock"></i></span>
+          Deposit
+        </p>
+      </header>
+      <div class="card-content">
+        <form>
+          <div class="field">
+            <label class="label">Enter amount you want to deposit</label>
+            <div class="control">
+              <input type="number" name="password_current" class="input" placeholder="Enter amount you want to deposit here">
+            </div>
+          </div>
+          <hr>
+
+          <hr>
+          <div class="field">
+            <div class="control">
+              <button type="submit" class="button green">
+                Submit
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+</div>
+<!--********************************* end of deposit *********************-->
+
+<!-- ************************** begining of transfer *********************** -->
+<div id="transfer" hidden="true">
+  <section class="is-title-bar container">
+    <div class="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
+      <ul>
+        <li>transfer</li>
+      </ul>
+    </div>
+  </section>
+  
+  <section class="is-hero-bar">
+    <div class="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
+      <h1 class="title">
+        transfer
+      </h1>
+    </div>
+  </section>
+  
+    <section class="section main-section">
+  
+      <div class="card">
+        <header class="card-header">
+          <p class="card-header-title">
+            <span class="icon"><i class="mdi mdi-lock"></i></span>
+            Enter transfer Detail
+          </p>
+        </header>
+        <div class="card-content">
+            <div class="field">
+              <label class="label">Enter Destination Account</label>
+              <div class="control">
+                <input type="number"  name="" class="input" placeholder="Enter Destination Account" >
+              </div>
+              <p class="help">Required. account number</p>
+            </div>
+            <div class="field">
+              <label class="label">Enter amount</label>
+              <div class="control">
+                <input type="password" class="input" placeholder="Enter amount">
+              </div>
+            </div>
+            <div class="field">
+              <label class="label">Enter Narration</label>
+              <div class="control">
+                <input type="password" class="input" placeholder="Enter Narration">
+              </div>
+            </div>
+            <hr>
+            <div class="field">
+              <div class="control">
+                <button type="submit" class="button green">
+                  Submit
+                </button>
+              </div>
+            </div>
+        </div>
+      </div>
+    </section>
+</div>
+
+<!-- ******************************** end  of transfer *********************** -->
+
+
+<!-- ******************************** begining  of recharge *********************** -->
+<div hidden="true" id="recharge">
+  <section class="is-title-bar">
+    <div class="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
+      <ul>
+        <li>recharge card</li>
+      </ul>
+    </div>
+  </section>
+  
+  <section class="is-hero-bar">
+    <div class="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
+      <h1 class="title">
+        recharge card
+      </h1>
+    </div>
+  </section>
+  <div class="container bg-dark my-2 mx-5">
+
+      <input type="number" name="" id="" class="">
+    </div>
+    
+    <!--  rechargege card -->
+    
+    <!-- recharge card -->
+    
+</div>
+
+  <!--  recharge card-->
+  
+<!-- ******************************** end  of recharge *********************** -->
+
+<!-- ******************************** begining  of error *********************** -->
+<div id="error" hidden="true">
+  <section class="is-title-bar container">
+    <div class="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
+      <ul>
+      
+      </ul>
+    </div>
+  </section>
+  
+  <section class="is-hero-bar">
+    <div class="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
+      <h1 class="title">
+        error 405 
+      </h1>
+    </div>
+  </section>
+</div>
+<!-- ******************************** end  of error *********************** -->
+
+<!-- ******************************** begining  of sucessful *********************** -->
+
+<div id="sucess" hidden="true">
+  <section class="is-hero-bar">
+    <div class="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
+      <h1 class="title">
+        successful
+      </h1>
+    </div>
+  </section>
+</div>
+
+<!-- ******************************** endinging  of sucessful *********************** -->
+
+
+
+
+<!-- Scripts below are for demo only -->
+<script src={% static "js/index.js" %}></script>
+<script type="text/javascript" src={% static "js/main.min.js" %}></script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
+<script type="text/javascript" src={% static "js/chart.sample.min.js" %}></script>
+
+<!-- Icons below are for demo only. Feel free to use any icon pack. Docs: https://bulma.io/documentation/elements/icon/ -->
+<link rel="stylesheet" href="https://cdn.materialdesignicons.com/4.9.95/css/materialdesignicons.min.css">
+
+</body>
+</html>

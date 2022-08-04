@@ -1,0 +1,30 @@
+{% extends 'main_page.html' %}
+{% block title%} Change PIN {% endblock title%}
+
+{% block body_content %}
+<p>
+    <span class="date text-pink text-size-30px mt-5">
+        {% if messages %}
+            {% for message in messages %}
+                {{message}}
+            {% endfor %}
+        {% endif %}
+    </span>
+</p>
+<div class="cont" style="margin-top: 100px; margin-left: 100px;">
+    <div class="row">
+        <div class="way col-md-6 col-lg-6 col-xxl-6 col-sm-12 col-xm-12">
+            <span>Enter your account number and Default PIN Below and new PIN to change it.</span>
+            <form action="" method="post" class="mt-4" enctype="multipart/form-data">
+                {% csrf_token %}    <!-- Form security -->
+                {% load bootstrap %}
+                {{pin_form|bootstrap}}
+                <div class="d-flex justify-content-center">
+                    <input type="submit" value="Change PIN" class="btn bg-white bc-white mt-2 ml-2 loginbutton">
+                </div>
+            </form>
+        </div>
+        
+    </div>
+</div>
+{% endblock body_content %}
